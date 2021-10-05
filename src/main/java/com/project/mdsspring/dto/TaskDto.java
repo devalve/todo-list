@@ -3,11 +3,13 @@ package com.project.mdsspring.dto;
 import lombok.Getter;
 
 @Getter
-public class CreateTodoDto {
+public class TaskDto {
+    private final Integer id;
     private final String title;
     private final String text;
 
-    public CreateTodoDto(String title, String text) {
+    public TaskDto(Integer id, String title, String text) {
+        this.id = id;
         this.title = title;
         this.text = text;
     }
