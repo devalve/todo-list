@@ -15,41 +15,41 @@ import java.util.List;
 @Service
 public class JpaTaskService implements TaskService {
 
-    private final TaskRepo repo;
-    private final TaskMapper mapper;
-    private final TaskFactory factory;
+    private final TaskRepo taskRepo;
+    private final TaskMapper taskMapper;
+    private final TaskFactory taskFactory;
 
-    public JpaTaskService(TaskRepo repo, TaskMapper mapper, TaskFactory factory) {
-        this.repo = repo;
-        this.mapper = mapper;
-        this.factory = factory;
+    public JpaTaskService(TaskRepo repo, TaskMapper mapper, TaskFactory taskFactory) {
+        this.taskRepo = repo;
+        this.taskMapper = mapper;
+        this.taskFactory = taskFactory;
     }
 
     @Override
     public List<TaskDto> getAllTasks() {
-        List<Task> task = repo.findAll();
-        return mapper.mapTaskToTaskDto(task);
+        List<Task> task = taskRepo.findAll();
+        return taskMapper.mapTaskToTaskDto(task);
     }
 
     @Override
     public TaskDto createTask(TaskCreateDto taskCreateDto) {
-        Task task = factory.build(
+        Task task = taskFactory.build(
                 taskCreateDto.getTitle(),
                 taskCreateDto.getText(),
                 1    //todo надо бы настоящий ид-шник вставлять
         );
-        task = repo.saveAndFlush(task);
-        return mapper.mapTaskToTaskDto(task);
+        task = taskRepo.saveAndFlush(task);
+        return taskMapper.mapTaskToTaskDto(task);
     }
 
     @Override
     public TaskDto editTask(Integer taskId, TaskEditDto taskEditDto) {
-        Task task = repo.findById(taskId).orElseThrow();
+        Task task = taskRepo.findById(taskId).orElseThrow();
 
         task.setText(taskEditDto.getText());
 
-        repo.saveAndFlush(task);
+        taskRepo.saveAndFlush(task);
 
-        return mapper.mapTaskToTaskDto(task);
+        return taskMapper.mapTaskToTaskDto(task);
     }
 }
