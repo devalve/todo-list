@@ -1,6 +1,5 @@
 package com.project.mdsspring.entity;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
