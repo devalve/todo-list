@@ -4,8 +4,10 @@ import com.project.mdsspring.dto.TaskCreateDto;
 import com.project.mdsspring.dto.TaskDto;
 import com.project.mdsspring.dto.TaskEditDto;
 import com.project.mdsspring.entity.Task;
-import com.project.mdsspring.repository.TaskRepo;
+import com.project.mdsspring.repository.TaskRepository;
+import com.project.mdsspring.repository.UserRepository;
 import com.project.mdsspring.service.TaskService;
+import com.project.mdsspring.service.context.UserContext;
 import com.project.mdsspring.service.factory.TaskFactory;
 import com.project.mdsspring.service.mapper.TaskMapper;
 import org.springframework.stereotype.Service;
@@ -15,40 +17,53 @@ import java.util.List;
 @Service
 public class JpaTaskService implements TaskService {
 
-    private final TaskRepo taskRepo;
+    private final UserContext userContext;
+    private final UserRepository userRepo;
+
+    private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
     private final TaskFactory taskFactory;
 
-    public JpaTaskService(TaskRepo repo, TaskMapper mapper, TaskFactory taskFactory) {
-        this.taskRepo = repo;
-        this.taskMapper = mapper;
+    public JpaTaskService(UserContext userContext,
+                          UserRepository userRepo, TaskRepository taskRepository,
+                          TaskMapper taskMapper,
+                          TaskFactory taskFactory) {
+        this.userContext = userContext;
+        this.userRepo = userRepo;
+        this.taskRepository = taskRepository;
+        this.taskMapper = taskMapper;
         this.taskFactory = taskFactory;
     }
 
     @Override
     public List<TaskDto> getAllTasks() {
-        List<Task> task = taskRepo.findAll();
+        List<Task> task = taskRepository.findAll();
         return taskMapper.mapTaskToTaskDto(task);
     }
 
     @Override
     public TaskDto createTask(TaskCreateDto taskCreateDto) {
+
+        String nickname = userContext.getNickname();
+
+        Integer authorId = userRepo.findByNickname(nickname).orElseThrow().getId();
+
         Task task = taskFactory.build(
                 taskCreateDto.getTitle(),
                 taskCreateDto.getText(),
-                1    //todo надо бы настоящий ид-шник вставлять
+                authorId
         );
-        task = taskRepo.saveAndFlush(task);
+        task = taskRepository.saveAndFlush(task);
         return taskMapper.mapTaskToTaskDto(task);
     }
 
     @Override
     public TaskDto editTask(Integer taskId, TaskEditDto taskEditDto) {
-        Task task = taskRepo.findById(taskId).orElseThrow();
+        Task task = taskRepository.findById(taskId).orElseThrow();
 
         task.setText(taskEditDto.getText());
 
-        taskRepo.saveAndFlush(task);
+        taskRepository.saveAndFlush(task);
 
         return taskMapper.mapTaskToTaskDto(task);
     }

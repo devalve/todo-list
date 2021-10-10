@@ -1,7 +1,7 @@
 create table todo.user
 (
     id          serial primary key,
-    nickname    varchar(20) not null,
+    nickname    varchar(20) unique not null,
     last_online_at timestamptz default now()
 );
 create table todo.task
