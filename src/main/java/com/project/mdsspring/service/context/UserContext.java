@@ -5,4 +5,5 @@ public interface UserContext {
     String getNickname();
 
     void setNickname(String nickname);
+
 }

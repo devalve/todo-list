@@ -10,6 +10,7 @@ public interface TaskService {
 
     List<TaskDto> getAllTasks();
 
+
     TaskDto createTask(TaskCreateDto taskCreateDto);
 
     TaskDto editTask(Integer taskId, TaskEditDto taskEditDto);
