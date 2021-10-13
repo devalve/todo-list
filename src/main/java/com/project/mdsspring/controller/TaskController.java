@@ -29,7 +29,7 @@ public class TaskController {
         return taskService.createTask(createDto);
     }
 
-    @PutMapping("/put/{id}")
+    @PutMapping("/{id}")
     public TaskDto editTask(@RequestBody TaskEditDto editDto,
                             @PathVariable("id") Integer taskID) {
         return taskService.editTask(taskID, editDto);
