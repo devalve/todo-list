@@ -1,6 +1,6 @@
 package com.project.mdsspring.service.mapper;
 
-import com.project.mdsspring.dto.TaskDto;
+import com.project.mdsspring.dto.task.TaskDto;
 import com.project.mdsspring.entity.Task;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.project.mdsspring.dto;
+package com.project.mdsspring.dto.task;
 
 import lombok.Getter;
 

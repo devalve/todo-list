@@ -1,8 +1,8 @@
 package com.project.mdsspring.service;
 
-import com.project.mdsspring.dto.TaskCreateDto;
-import com.project.mdsspring.dto.TaskDto;
-import com.project.mdsspring.dto.TaskEditDto;
+import com.project.mdsspring.dto.task.TaskCreateDto;
+import com.project.mdsspring.dto.task.TaskDto;
+import com.project.mdsspring.dto.task.TaskEditDto;
 
 import java.util.List;
 
