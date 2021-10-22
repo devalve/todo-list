@@ -8,9 +8,9 @@ import com.project.mdsspring.repository.TaskRepository;
 import com.project.mdsspring.repository.UserRepository;
 import com.project.mdsspring.service.TaskService;
 import com.project.mdsspring.service.context.UserContext;
-import com.project.mdsspring.service.factory.TaskFactory;
 import com.project.mdsspring.service.mapper.TaskMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,17 +22,16 @@ public class JpaTaskService implements TaskService {
 
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
-    private final TaskFactory taskFactory;
+
 
     public JpaTaskService(UserContext userContext,
-                          UserRepository userRepo, TaskRepository taskRepository,
-                          TaskMapper taskMapper,
-                          TaskFactory taskFactory) {
+                          UserRepository userRepo,
+                          TaskRepository taskRepository,
+                          TaskMapper taskMapper) {
         this.userContext = userContext;
         this.userRepository = userRepo;
         this.taskRepository = taskRepository;
         this.taskMapper = taskMapper;
-        this.taskFactory = taskFactory;
     }
 
     @Override
@@ -41,6 +40,7 @@ public class JpaTaskService implements TaskService {
         return taskMapper.mapTaskToTaskDto(task);
     }
 
+    @Transactional
     @Override
     public TaskDto createTask(TaskCreateDto taskCreateDto) {
 
@@ -48,15 +48,15 @@ public class JpaTaskService implements TaskService {
 
         Integer authorId = userRepository.findByNickname(nickname).orElseThrow().getId();
 
-        Task task = taskFactory.build(
+        Task task = new Task(
                 taskCreateDto.getTitle(),
                 taskCreateDto.getText(),
-                authorId
-        );
+                authorId);
         task = taskRepository.saveAndFlush(task);
         return taskMapper.mapTaskToTaskDto(task);
     }
 
+    @Transactional
     @Override
     public TaskDto editTask(Integer taskId, TaskEditDto taskEditDto) {
         Task task = taskRepository.findById(taskId).orElseThrow();

@@ -3,6 +3,7 @@ package com.project.mdsspring.controller;
 import com.project.mdsspring.dto.user.UserWithRolesDto;
 import com.project.mdsspring.dto.user.filter.UserFilterDto;
 import com.project.mdsspring.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -17,6 +18,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasRole('admin')")
     @PostMapping("/{nickname}/roles")
     public void editRole(@RequestBody Collection<String> codes,
                          @PathVariable String nickname) {
@@ -29,6 +31,7 @@ public class UserController {
         return userService.getUsers();
     }
 
+    @PreAuthorize("hasRole('admin')")
     @PostMapping
     public List<UserWithRolesDto> getUsers(@RequestBody Collection<UserFilterDto> filters) {
         return userService.getUsers(filters);

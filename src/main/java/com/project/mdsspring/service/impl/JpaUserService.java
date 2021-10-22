@@ -1,5 +1,7 @@
 package com.project.mdsspring.service.impl;
 
+import com.project.mdsspring.dto.auth.UserAuthInfoDto;
+import com.project.mdsspring.dto.registration.UserRegistrationInfoDto;
 import com.project.mdsspring.dto.user.UserWithRolesDto;
 import com.project.mdsspring.dto.user.filter.UserFilterDto;
 import com.project.mdsspring.entity.Role;
@@ -14,7 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class JpaUserService implements UserService {
@@ -59,6 +63,31 @@ public class JpaUserService implements UserService {
         List<User> users = userRepository.findAll(UserSpecifications.findUsers(filters));
         return userMapper.mapUserToUserDto(users);
     }
+
+    @Override
+    public Optional<UserAuthInfoDto> findAuthInfo(String nickname) {
+        Optional<User> userOptional = userRepository.findOneWithRolesByNickname(nickname);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return Optional.of(new UserAuthInfoDto(
+                    user.getId(),
+                    user.getNickname(),
+                    user.getPassword(),
+                    user.getRoles().stream().map(Role::getCode).collect(Collectors.toSet())
+            ));
+        } else return Optional.empty();
+    }
+
+    @Transactional
+    @Override
+    public String register(UserRegistrationInfoDto userRegistrationInfoDto) {
+        User user = new User(userRegistrationInfoDto.getNickname(), userRegistrationInfoDto.getPassword());
+        userRepository.saveAndFlush(user);
+        return "Ok!";
+    }
+
+
 }
 
 
