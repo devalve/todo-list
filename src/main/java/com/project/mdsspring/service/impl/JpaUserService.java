@@ -84,10 +84,8 @@ public class JpaUserService implements UserService {
     public String register(UserRegistrationInfoDto userRegistrationInfoDto) {
         User user = new User(userRegistrationInfoDto.getNickname(), userRegistrationInfoDto.getPassword());
         userRepository.saveAndFlush(user);
-        return "Ok!";
+        return "Registration successful!";
     }
-
-
 }
 
 
