@@ -27,10 +27,10 @@ public class JpaUserService implements UserService {
     private final UserMapper userMapper;
 
     public JpaUserService(
-            UserRepository userRepo,
+            UserRepository userRepository,
             RoleRepository roleRepository, UserMapper userMapper) {
 
-        this.userRepository = userRepo;
+        this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userMapper = userMapper;
     }
