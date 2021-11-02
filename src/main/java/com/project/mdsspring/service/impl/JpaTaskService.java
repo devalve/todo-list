@@ -9,7 +9,9 @@ import com.project.mdsspring.repository.UserRepository;
 import com.project.mdsspring.service.TaskService;
 import com.project.mdsspring.service.context.UserContext;
 import com.project.mdsspring.service.mapper.TaskMapper;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -42,7 +44,7 @@ public class JpaTaskService implements TaskService {
 
     @Transactional
     @Override
-    public TaskDto createTask(TaskCreateDto taskCreateDto) {
+    public TaskDto createTask(TaskCreateDto taskCreateDto)  {
 
         String nickname = userContext.getNickname();
 
@@ -53,6 +55,10 @@ public class JpaTaskService implements TaskService {
                 taskCreateDto.getText(),
                 authorId);
         task = taskRepository.saveAndFlush(task);
+
+
+        //throw new UnsupportedOperationException("Something wrong!");
+
         return taskMapper.mapTaskToTaskDto(task);
     }
 
