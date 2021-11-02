@@ -1,8 +1,8 @@
 package com.project.mdsspring.service.impl;
 
-import com.project.mdsspring.dto.TaskCreateDto;
-import com.project.mdsspring.dto.TaskDto;
-import com.project.mdsspring.dto.TaskEditDto;
+import com.project.mdsspring.dto.task.TaskCreateDto;
+import com.project.mdsspring.dto.task.TaskDto;
+import com.project.mdsspring.dto.task.TaskEditDto;
 import com.project.mdsspring.entity.Task;
 import com.project.mdsspring.repository.TaskRepository;
 import com.project.mdsspring.repository.UserRepository;
@@ -21,7 +21,7 @@ import java.util.List;
 public class JpaTaskService implements TaskService {
 
     private final UserContext userContext;
-    private final UserRepository userRepo;
+    private final UserRepository userRepository;
 
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
@@ -32,7 +32,7 @@ public class JpaTaskService implements TaskService {
                           TaskMapper taskMapper,
                           TaskFactory taskFactory) {
         this.userContext = userContext;
-        this.userRepo = userRepo;
+        this.userRepository = userRepo;
         this.taskRepository = taskRepository;
         this.taskMapper = taskMapper;
         this.taskFactory = taskFactory;
@@ -51,7 +51,7 @@ public class JpaTaskService implements TaskService {
 
         String nickname = userContext.getNickname();
 
-        Integer authorId = userRepo.findByNickname(nickname).orElseThrow().getId();
+        Integer authorId = userRepository.findByNickname(nickname).orElseThrow().getId();
 
         Task task = taskFactory.build(
                 taskCreateDto.getTitle(),

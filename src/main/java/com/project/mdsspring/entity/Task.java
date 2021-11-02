@@ -23,8 +23,12 @@ public class Task {
     @CreationTimestamp
     private Instant createdAt;
 
+    @Column(name = "author_id")
     private Integer authorId;
 
+    @ManyToOne
+    @JoinColumn(name = "author_id", insertable = false, updatable = false)
+    private User user;
 
     public Task(String title, String text, Integer authorId) {
         this.title = title;
