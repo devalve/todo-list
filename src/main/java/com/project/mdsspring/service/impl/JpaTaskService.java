@@ -10,7 +10,10 @@ import com.project.mdsspring.service.TaskService;
 import com.project.mdsspring.service.context.UserContext;
 import com.project.mdsspring.service.factory.TaskFactory;
 import com.project.mdsspring.service.mapper.TaskMapper;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -41,8 +44,10 @@ public class JpaTaskService implements TaskService {
         return taskMapper.mapTaskToTaskDto(task);
     }
 
+    @Retryable(UnsupportedOperationException.class)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
-    public TaskDto createTask(TaskCreateDto taskCreateDto) {
+    public TaskDto createTask(TaskCreateDto taskCreateDto)  {
 
         String nickname = userContext.getNickname();
 
@@ -54,6 +59,10 @@ public class JpaTaskService implements TaskService {
                 authorId
         );
         task = taskRepository.saveAndFlush(task);
+
+
+        //throw new UnsupportedOperationException("Something wrong!");
+
         return taskMapper.mapTaskToTaskDto(task);
     }
 
