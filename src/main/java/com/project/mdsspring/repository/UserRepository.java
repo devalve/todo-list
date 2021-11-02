@@ -18,6 +18,9 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     UserIdProjection findOneByNickname(String nickname);
 
     @EntityGraph("User.roles")
+    Optional<User> findOneWithRolesByNickname(String nickname);
+
+    @EntityGraph("User.roles")
     @Query("select u from User u")
     List<User> findAllWithRoles();
 }

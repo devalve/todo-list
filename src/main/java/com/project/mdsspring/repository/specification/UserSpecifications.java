@@ -22,15 +22,18 @@ public final class UserSpecifications {
     @SuppressWarnings("unchecked")
     public static Specification<User> findUsers(Collection<UserFilterDto> filters) {
         return (root, query, criteriaBuilder) -> {
+
             List<Predicate> predicates = new LinkedList<>();
             Fetch<User, Role> roleFetch = root.fetch("roles", JoinType.LEFT);
             Join<User, Role> roleJoin = (Join<User, Role>) roleFetch;
+
             for (var filter : filters) {
                 switch (filter.getUserField()) {
                     case ID -> {
                         Set<Integer> ids = filter.getValues()
                                 .stream()
-                                .map(Integer::parseInt).collect(Collectors.toSet());
+                                .map(Integer::parseInt)
+                                .collect(Collectors.toSet());
                         predicates.add(criteriaBuilder.in(root.get("id")).value(ids));
                     }
                     case NICKNAME -> predicates.add(criteriaBuilder.in(root.get("nickname")).value(filter.getValues()));
