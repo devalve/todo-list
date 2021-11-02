@@ -15,6 +15,4 @@ public class UserFilterDto {
         this.userField = userField;
         this.values = values;
     }
-    //todo возможно это понадобиться @JsonProperty("userField") UserField userField,
-    //                         @JsonProperty("values") Collection<String> values
 }
